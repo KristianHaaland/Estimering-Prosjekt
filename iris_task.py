@@ -19,21 +19,39 @@ def read_file(txt_file):
         training_data = iris_data[:30]
         test_data = iris_data[30:]
   
-    return iris_data, training_data, test_data
+    return training_data, test_data
 
 class_1, class_1_training, class_1_test = read_file('class_1')
 class_2, class_2_training, class_2_test = read_file('class_2')
 class_3, class_3_training, class_3_test = read_file('class_3')
 #training, test = read_file('iris.data')
 
-#The 
+#z=Wx
 def sigmoid(z):
      return 1/(1+np.e(-z))
 
+#Initializing the weigth matrix. Each element is initially random between 0 and 0.01
+W = np.random.rand(3, 4) * 0.01
 
 
+def g_k(W, x):
+     return np.dot(W, x)
 
+#g_k er estimert verdi fra overnevnte funksjon
+#t_k er target vector. Så om input x_k er av class 1, vil t_k=[1, 0, 0]
+#x_k er input vektoren
+def grad_MSE(g, t, x):
+     
+     sum_elements = 0
 
+     for i in range(4):
+          sum_elements += (g[i]-t[i])*g[i]*(1-g[i])*x[i]
+
+     return sum_elements
+
+def training():
+     
+    return 0
 
 #Scatter plots
 def plot(training_data):
