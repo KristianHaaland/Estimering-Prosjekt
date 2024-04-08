@@ -21,10 +21,10 @@ def read_file(txt_file):
   
     return training_data, test_data
 
-class_1, class_1_training, class_1_test = read_file('class_1')
-class_2, class_2_training, class_2_test = read_file('class_2')
-class_3, class_3_training, class_3_test = read_file('class_3')
-#training, test = read_file('iris.data')
+class_1_training, class_1_test = read_file('class_1')
+class_2_training, class_2_test = read_file('class_2')
+class_3_training, class_3_test = read_file('class_3')
+
 
 #z=Wx
 def sigmoid(z):
@@ -33,7 +33,7 @@ def sigmoid(z):
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
 W = np.random.rand(3, 4) * 0.01
 
-
+#Sigmoid function to truncate output to become between 0 and 1
 def g_k(W, x):
      return np.dot(W, x)
 
@@ -44,14 +44,11 @@ def grad_MSE(g, t, x):
      
      sum_elements = 0
 
-     for i in range(4):
-          sum_elements += (g[i]-t[i])*g[i]*(1-g[i])*x[i]
+     for i in range(len(class_1_training)-1):
+          sum_elements += (g[i]-t[i])*g[i]*(1-g[i])*np.transpose(x[i])
 
      return sum_elements
 
-def training():
-     
-    return 0
 
 #Scatter plots
 def plot(training_data):
