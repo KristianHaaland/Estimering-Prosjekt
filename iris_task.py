@@ -33,7 +33,6 @@ def sigmoid(z):
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
 W = np.random.rand(3, 4) * 0.01
 
-#Sigmoid function to truncate output to become between 0 and 1
 def g_k(W, x):
      return np.dot(W, x)
 
