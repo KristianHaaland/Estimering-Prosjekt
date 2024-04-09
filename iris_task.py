@@ -113,27 +113,6 @@ def test(W, test_data):
 #Bytte mengde for trening og test
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #Scatter plots
 # def plot(training_data, legend_label):
      
@@ -154,3 +133,4 @@ def test(W, test_data):
 # plot(class_3, 'Iris-virginica')
 # plt.legend()
 # plt.show()
+
