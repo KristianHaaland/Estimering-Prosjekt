@@ -65,7 +65,7 @@ def plot(training_data):
 
      return plt.scatter(petal_lengths, petal_widths)
 
-#plot(class_1)
-#plot(class_2)
-#plot(class_3)
-#plt.show()
+plot(class_1_test)
+plot(class_2_test)
+plot(class_3_test)
+plt.show()
