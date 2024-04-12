@@ -1,6 +1,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 # Sepal Length, Sepal Width, Petal Length, Petal Width
 
@@ -15,6 +16,9 @@ def read_file(txt_file):
         for line in data:
                 iris_data.append([float(num) for num in line.split(',')])
 
+        for row in iris_data:
+             row.append(1)
+
         #Splitting into training and test data
         training_data = iris_data[:30]
         test_data = iris_data[30:]
@@ -24,18 +28,21 @@ def read_file(txt_file):
 class_1, class_1_training, class_1_test = read_file('class_1')
 class_2, class_2_training, class_2_test = read_file('class_2')
 class_3, class_3_training, class_3_test = read_file('class_3')
+
+# Concatenate training and test datasets
 training_data = np.concatenate((class_1_training, class_2_training, class_3_training), axis=0)
 test_data = np.concatenate((class_1_test, class_2_test, class_3_test), axis=0)
 
 def sigmoid(z):
-     return 1/(1+np.exp(-z))
+     return (np.exp(z))/(1+np.exp(z))
 
 def g_k(W, x_k):
      z = np.dot(W, x_k)
      return sigmoid(z)
 
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
-W = np.random.rand(3, 4) * 0.01
+#W = np.ones((3, 5))
+W = np.random.rand(3, 5)*0.01
 
 #g_k er estimert verdi fra overnevnte funksjon
 #t_k er target vector. Så om input x_k er av class 1, vil t_k=[1, 0, 0]
@@ -43,11 +50,11 @@ W = np.random.rand(3, 4) * 0.01
 def grad_MSE(W, training_data):
      
      #Initial values for MSE and its gradient matrix
-     grad_MSE_matrix = np.zeros((3, 4))
+     grad_MSE_matrix = np.zeros((3, 5))
      MSE = 0
 
      #Checks which class the target output is
-     for k in range(len(training_data)-1):
+     for k in range(len(training_data)):
           if k < 30:
                t = np.array([1, 0, 0])
           elif 30 <= k < 60:
@@ -57,12 +64,12 @@ def grad_MSE(W, training_data):
 
           #Computing values for g, x_k and column vector used in outer product
           g = g_k(W, training_data[k])
-          x_k = training_data[k].reshape(1, -1)
-          col_vector = ((g - t) * g * (1 - g)).reshape(-1, 1)
+          col_vector = ((g - t) * g * (1 - g))
+          x_k = np.array(training_data[k])
 
-          #Computing the MSE and its gradient
-          MSE += 0.5 * np.dot((g-t).T, g-t)
-          grad_MSE_matrix += np.dot(col_vector, x_k)
+          # Computing the MSE and its gradient
+          MSE += 0.5 * np.inner(g-t, g-t)
+          grad_MSE_matrix += np.outer(col_vector, x_k)
 
      return grad_MSE_matrix, MSE
 
@@ -70,47 +77,82 @@ def grad_MSE(W, training_data):
 def training(W, training_data):
      
      #Initial values used in training
-     alpha = .002
+     alpha = 0.03
      MSE = grad_MSE(W, training_data)[1]
      iteration = 0
 
      #Training until the MSE reaches disired threshold
      while MSE > 9:
 
-          #Iterating the training data for current W matrix
-          for i in range(len(training_data)):
-               #Updating the W matrix
-               W -= alpha * grad_MSE(W, training_data)[0]
+          #Updating the W matrix
+          W -= alpha * grad_MSE(W, training_data)[0]
 
           #Updating the MSE     
           MSE = grad_MSE(W, training_data)[1]
-          print(MSE)
 
           iteration += 1
-     #print(iteration)
+
+     print("Number of iterations: ", iteration)
+     print("MSE:", MSE)
 
      return W
 
-#print(training(W, training_data))
-
 def test(W, test_data):
-         
-         for x_k in test_data:
-              g = g_k(W, x_k)
-              print(np.argmax(g))
+     
+     pred = []
+     
+     for x_k in test_data:
+          g = g_k(W, x_k)
 
-#W_trained = training(W, training_data)
-#test(W_trained, test_data)
+          pred.append(np.argmax(g))
+
+     return pred
+
+def conf_matrix(test_data, pred):
+
+     true = []
+
+     for k in range(len(test_data)):
+          if k < 20:
+               true.append(1)
+          elif 20 <= k < 40:
+               true.append(2)
+          else:
+               true.append(3)
 
 
+     cm = confusion_matrix(true, pred)
+     error = accuracy_score(true, pred)
+
+     return cm, error
+
+#Fikse denne, orka ikke å kode mer
+def histogram (data):
+
+     plt.hist(data[:, 2], bins=20, edgecolor='black')
+     plt.xlabel('Value')
+     plt.ylabel('Frequency')
+     plt.title(f'Histogram of Feature 0')
+     plt.grid(True)
+
+     plt.tight_layout()
+     plt.show()     
+
+#histogram(training_data)
+
+#Training phase
+W_trained = training(W, training_data)
+#print("Finally trained W matrix:", W_trained)
+
+# # #Test phase. Returns a 3x1-list with the number of classified samples for each class
+pred = test(W_trained, test_data)
+
+# # #Confussion matrix
+m, error = conf_matrix(test_data, pred)
+print("Confusion matrix:", m)
+print("Error rate:", error)
 
 
-#Til neste gang:
-
-#Sjekke om det er klassifisert riktig eller ikke
-#Lage confussion matrix
-#Finne error rate
-#Bytte mengde for trening og test
 
 
 #Scatter plots
