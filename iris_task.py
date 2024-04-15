@@ -23,7 +23,7 @@ def read_file(txt_file):
         training_data = iris_data[:30]
         test_data = iris_data[30:]
   
-    return iris_data, training_data, test_data
+    return np.array(iris_data), np.array(training_data), np.array(test_data)
 
 class_1, class_1_training, class_1_test = read_file('class_1')
 class_2, class_2_training, class_2_test = read_file('class_2')
@@ -41,7 +41,6 @@ def g_k(W, x_k):
      return sigmoid(z)
 
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
-#W = np.ones((3, 5))
 W = np.random.rand(3, 5)*0.01
 
 #g_k er estimert verdi fra overnevnte funksjon
@@ -108,6 +107,7 @@ def test(W, test_data):
 
      return pred
 
+
 def conf_matrix(test_data, pred):
 
      true = []
@@ -126,53 +126,52 @@ def conf_matrix(test_data, pred):
 
      return cm, error
 
-#Fikse denne, orka ikke å kode mer
-def histogram (data):
 
-     plt.hist(data[:, 2], bins=20, edgecolor='black')
-     plt.xlabel('Value')
-     plt.ylabel('Frequency')
-     plt.title(f'Histogram of Feature 0')
-     plt.grid(True)
+#                                              Training phase
+# W_trained = training(W, training_data)
+# print("Finally trained W matrix:", W_trained)
 
-     plt.tight_layout()
-     plt.show()     
+#                        Test phase. Returns a 3x1-list with the number of classified samples for each class
+# pred = test(W_trained, test_data)
 
-#histogram(training_data)
-
-#Training phase
-W_trained = training(W, training_data)
-#print("Finally trained W matrix:", W_trained)
-
-# # #Test phase. Returns a 3x1-list with the number of classified samples for each class
-pred = test(W_trained, test_data)
-
-# # #Confussion matrix
-m, error = conf_matrix(test_data, pred)
-print("Confusion matrix:", m)
-print("Error rate:", error)
+#                                            Confussion matrix
+# m, error = conf_matrix(test_data, pred)
+# print("Confusion matrix:", m)
+# print("Error rate:", error)
 
 
+def plot():
+     fig, axs = plt.subplots(4, 4)
+     features = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+     for i in range(4):
+          for j in range(4):
+               if i == j:
+                    ax = axs[i, j]
+                    ax.axis('off')  # Hide axes
+                    ax.text(0.5, 0.5, f'{features[i]}', ha='center', va='center', fontsize=12)
+                    continue
 
+               ax = axs[i, j]
+               ax.scatter(class_1[:, j], class_1[:, i], color='red', label='Iris-setosa', s=10)
+               ax.scatter(class_2[:, j], class_2[:, i], color='green', label='Iris-versicolor', s=10)
+               ax.scatter(class_3[:, j], class_3[:, i], color='blue', label='Iris-virginica', s=10)
 
-#Scatter plots
-# def plot(training_data, legend_label):
-     
-#      sepal_lengths = [elem[0] for elem in training_data]
-#      sepal_widths = [elem[1] for elem in training_data]
-#      petal_lengths = [elem[2] for elem in training_data]
-#      petal_widths = [elem[3] for elem in training_data]
+               if i==0 and j==3:
+                    ax.legend()
+     plt.show()
 
-#      plt.xlabel('Sepal Length')
-#      plt.ylabel('Sepal Width')
-#      plt.grid()
-#      #plt.title()
+plot()
 
-#      return plt.scatter(petal_lengths, petal_widths, label = legend_label)
+def histogram():
+     fig, axs = plt.subplots(1, 4)
+     features = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+     for i in range(4):
+          ax = axs[i]
+          ax.hist(class_1[:, i], color='red', label='Iris-setosa', alpha=0.5)
+          ax.hist(class_2[:, i], color='green', label='Iris-versicolor', alpha=0.5)
+          ax.hist(class_3[:, i], color='blue', label='Iris-virginica', alpha=0.5)
 
-# plot(class_1, 'Iris-setosa')
-# plot(class_2, 'Iris-vercicolor')
-# plot(class_3, 'Iris-virginica')
-# plt.legend()
-# plt.show()
+          ax.set_xlabel(f'{features[i]}')
+     plt.show()
 
+histogram()
