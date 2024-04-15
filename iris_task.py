@@ -160,16 +160,18 @@ def plot():
                     ax.legend()
      plt.show()
 
-plot()
+#plot()
 
 def histogram():
-     fig, axs = plt.subplots(1, 4)
+     fig, axs = plt.subplots(4, 1)
      features = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+     bin_width = 0.2
      for i in range(4):
           ax = axs[i]
-          ax.hist(class_1[:, i], color='red', label='Iris-setosa', alpha=0.5)
-          ax.hist(class_2[:, i], color='green', label='Iris-versicolor', alpha=0.5)
-          ax.hist(class_3[:, i], color='blue', label='Iris-virginica', alpha=0.5)
+          bins = np.arange(0, 8 + bin_width, bin_width)
+          ax.hist(class_1[:, i], bins=bins, color='red', label='Iris-setosa', alpha=0.5)#, range=(0, 8))
+          ax.hist(class_2[:, i], bins=bins, color='green', label='Iris-versicolor', alpha=0.5)#, range=(0, 8))
+          ax.hist(class_3[:, i], bins=bins, color='blue', label='Iris-virginica', alpha=0.5)#, range=(0, 8))
 
           ax.set_xlabel(f'{features[i]}')
      plt.show()
