@@ -9,6 +9,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 
 # ae, ah, aw, eh, er, ei, ih, iy, oa, oo, uh, uw
 
+"""------------------------ DATA FETCHING --------------------------------------------------------------------------------------------------------------"""
 def read_file(txt_file):
     with open(txt_file, 'r') as file:
 
@@ -53,8 +54,13 @@ uh_training, uh_test = uh_data[:70], uh_data[70:]
 uw_training, uw_test = uw_data[:70], uw_data[70:]
 
 test_data = np.concatenate((ae_test, ah_test, aw_test, eh_test, er_test, ei_test, ih_test, iy_test, oa_test, oo_test, uh_test, uw_test), axis=0)
+"""---------------------------------------------------------------------------------------------------------------------------------------------------------"""
 
+#A priori probabilities. We have the same amount of test samples (69) for each class
+P_w = 69/(12*69)
 
+#Calculating the mean-vector for training_data. The components are the mean values of the main frequencies
+#which describes the vowel
 def mean(training_data):
     mu_1 = np.mean(training_data[:, 0])
     mu_2 = np.mean(training_data[:, 1])
@@ -62,13 +68,74 @@ def mean(training_data):
     mu = [mu_1, mu_2, mu_3]
     return mu
 
+#Calculating the covariance matrix for training_data
 def cov_matrix(training_data):
-     return np.cov(training_data, rowvar=False)/len(training_data[:, 0])
+     cov_matrix = np.cov(training_data, rowvar=False)/len(training_data[:, 0])
 
-def multivariate_gaussian(x, mean, cov):
-    return multivariate_normal(mean=mean, cov=cov).pdf(x)
+     #Task 1c, only using the diagonal terms and removing the covariance terms
+     diag_matrix = np.diag(np.diag(cov_matrix))
 
-print("ae training set: ", ae_training)
-print("Mean value vector: ", mean(ae_training))
+     return diag_matrix
 
 
+#Dictionary which holds the estimated mean value and covariance matrix for each vowel
+trained_parameters = {
+    'ae': {'class': 1, 'mean': mean(ae_training), 'covariance': cov_matrix(ae_training)},
+    'ah': {'class': 2, 'mean': mean(ah_training), 'covariance': cov_matrix(ah_training)},
+    'aw': {'class': 3, 'mean': mean(aw_training), 'covariance': cov_matrix(aw_training)},
+    'eh': {'class': 4, 'mean': mean(eh_training), 'covariance': cov_matrix(eh_training)},
+    'er': {'class': 5, 'mean': mean(er_training), 'covariance': cov_matrix(er_training)},
+    'ei': {'class': 6, 'mean': mean(ei_training), 'covariance': cov_matrix(ei_training)},
+    'ih': {'class': 7, 'mean': mean(ih_training), 'covariance': cov_matrix(ih_training)},
+    'iy': {'class': 8, 'mean': mean(iy_training), 'covariance': cov_matrix(iy_training)},
+    'oa': {'class': 9, 'mean': mean(oa_training), 'covariance': cov_matrix(oa_training)},
+    'oo': {'class': 10, 'mean': mean(oo_training), 'covariance': cov_matrix(oo_training)},
+    'uh': {'class': 11, 'mean': mean(uh_training), 'covariance': cov_matrix(uh_training)},
+    'uw': {'class': 12, 'mean': mean(uw_training), 'covariance': cov_matrix(uw_training)}
+}
+
+def test(test_data):
+     
+    #Forslag
+    #For-loop der gauss regnes ut per vokal med mean og cov fra trained_parameters dictionariet
+    #Når for-loopen er ferdig plukkes indeksen i ut som har gitt størst gauss verdi * P(w)
+    #Dette blir det vokalen klassifiseres som. 
+    #Så legges denne i et antall i en ny vektor
+    #Så sammenlignes denne med antallet vi allerede vet
+
+    #Initializing lists and dictionary which stores the results of the test
+    predicted_labels = []
+    predicted_class = []
+    classification_counts = {vowel: 0 for vowel in trained_parameters}
+
+    #Looping through all the test data
+    for i in range(len(test_data)):
+
+        #Looping through the different gaussians. Vowels are the keys, parameters are values
+        for vowel, parameters in trained_parameters.items():
+            mean = parameters['mean']
+            cov = parameters['covariance']
+            prob = multivariate_normal(mean=mean, cov=cov).pdf(test_data[i])
+
+            #Descision rule. The gauss which gives the largest probability is the class which is chosen
+            if prob*P_w > max_prob:
+                max_prob = prob*P_w
+                class_num = parameters['class']
+                predicted_vowel = vowel
+
+        #Appending result to lists and dictionary
+        predicted_labels.append(predicted_vowel)
+        predicted_class.append(class_num)
+        classification_counts[predicted_vowel] += 1
+
+    return predicted_labels, predicted_class, classification_counts
+
+print(test(test_data)[0], '\n')
+print(test(test_data)[1], '\n')
+print(test(test_data)[2], '\n')
+
+
+#print("ae training set: ", ae_training)
+#print("Mean value vector: ", mean(ae_training))
+#print("Covariance matrix: ", cov_matrix(ae_training))
+#print(multivariate_gaussian(mean(ae_training), cov_matrix(ae_training)))
