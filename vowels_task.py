@@ -80,28 +80,21 @@ def cov_matrix(training_data):
 
 #Dictionary which holds the estimated mean value and covariance matrix for each vowel
 trained_parameters = {
-    'ae': {'class': 1, 'mean': mean(ae_training), 'covariance': cov_matrix(ae_training)},
-    'ah': {'class': 2, 'mean': mean(ah_training), 'covariance': cov_matrix(ah_training)},
-    'aw': {'class': 3, 'mean': mean(aw_training), 'covariance': cov_matrix(aw_training)},
-    'eh': {'class': 4, 'mean': mean(eh_training), 'covariance': cov_matrix(eh_training)},
-    'er': {'class': 5, 'mean': mean(er_training), 'covariance': cov_matrix(er_training)},
-    'ei': {'class': 6, 'mean': mean(ei_training), 'covariance': cov_matrix(ei_training)},
-    'ih': {'class': 7, 'mean': mean(ih_training), 'covariance': cov_matrix(ih_training)},
-    'iy': {'class': 8, 'mean': mean(iy_training), 'covariance': cov_matrix(iy_training)},
-    'oa': {'class': 9, 'mean': mean(oa_training), 'covariance': cov_matrix(oa_training)},
+    'ae': {'class': 1,  'mean': mean(ae_training), 'covariance': cov_matrix(ae_training)},
+    'ah': {'class': 2,  'mean': mean(ah_training), 'covariance': cov_matrix(ah_training)},
+    'aw': {'class': 3,  'mean': mean(aw_training), 'covariance': cov_matrix(aw_training)},
+    'eh': {'class': 4,  'mean': mean(eh_training), 'covariance': cov_matrix(eh_training)},
+    'er': {'class': 5,  'mean': mean(er_training), 'covariance': cov_matrix(er_training)},
+    'ei': {'class': 6,  'mean': mean(ei_training), 'covariance': cov_matrix(ei_training)},
+    'ih': {'class': 7,  'mean': mean(ih_training), 'covariance': cov_matrix(ih_training)},
+    'iy': {'class': 8,  'mean': mean(iy_training), 'covariance': cov_matrix(iy_training)},
+    'oa': {'class': 9,  'mean': mean(oa_training), 'covariance': cov_matrix(oa_training)},
     'oo': {'class': 10, 'mean': mean(oo_training), 'covariance': cov_matrix(oo_training)},
     'uh': {'class': 11, 'mean': mean(uh_training), 'covariance': cov_matrix(uh_training)},
     'uw': {'class': 12, 'mean': mean(uw_training), 'covariance': cov_matrix(uw_training)}
 }
 
 def test(test_data):
-     
-    #Forslag
-    #For-loop der gauss regnes ut per vokal med mean og cov fra trained_parameters dictionariet
-    #Når for-loopen er ferdig plukkes indeksen i ut som har gitt størst gauss verdi * P(w)
-    #Dette blir det vokalen klassifiseres som. 
-    #Så legges denne i et antall i en ny vektor
-    #Så sammenlignes denne med antallet vi allerede vet
 
     #Initializing lists and dictionary which stores the results of the test
     predicted_labels = []
@@ -119,6 +112,8 @@ def test(test_data):
             cov = parameters['covariance']
             prob = multivariate_normal(mean=mean, cov=cov).pdf(test_data[i])
 
+            #GMM should maybe be here
+
             #Descision rule. The gauss which gives the largest probability is the class which is chosen
             if prob*P_w > max_prob:
                 max_prob = prob*P_w
@@ -132,10 +127,20 @@ def test(test_data):
 
     return predicted_labels, predicted_class, classification_counts
 
+def conf_matrix(pred):
+     true = [i for i in range(1, 13) for _ in range(69)]
+
+     cm = confusion_matrix(true, pred)
+     error = accuracy_score(true, pred)
+
+     return cm, error
+
 print(test(test_data)[0], '\n')
 print(test(test_data)[1], '\n')
 print(test(test_data)[2], '\n')
 
+predicted = test(test_data)[1]
+print("Confusion matrix: \n", conf_matrix(predicted)[0])
 
 #print("ae training set: ", ae_training)
 #print("Mean value vector: ", mean(ae_training))
