@@ -111,6 +111,8 @@ def test(test_data):
     #Looping through all the test data
     for i in range(len(test_data)):
 
+        max_prob = 0
+
         #Looping through the different gaussians. Vowels are the keys, parameters are values
         for vowel, parameters in trained_parameters.items():
             mean = parameters['mean']
