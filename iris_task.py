@@ -92,7 +92,7 @@ def training(W, training_data):
           iteration += 1
 
      print("Number of iterations: ", iteration)
-     print("MSE:", MSE)
+     print("Final MSE:", MSE)
 
      return W
 
@@ -102,8 +102,9 @@ def test(W, test_data):
      
      for x_k in test_data:
           g = g_k(W, x_k)
-
-          pred.append(np.argmax(g))
+          
+          #+1 since python is zero indexed
+          pred.append(np.argmax(g)+1)
 
      return pred
 
@@ -120,24 +121,23 @@ def conf_matrix(test_data, pred):
           else:
                true.append(3)
 
-
      cm = confusion_matrix(true, pred)
-     error = accuracy_score(true, pred)
+     error = 1 - accuracy_score(true, pred)
 
      return cm, error
 
 
 #                                              Training phase
-# W_trained = training(W, training_data)
-# print("Finally trained W matrix:", W_trained)
+W_trained = training(W, training_data)
+print("Finally trained W matrix:", W_trained)
 
-#                        Test phase. Returns a 3x1-list with the number of classified samples for each class
-# pred = test(W_trained, test_data)
+#                       Test phase. Returns a 3x1-list with the number of classified samples for each class
+pred = test(W_trained, test_data)
 
-#                                            Confussion matrix
-# m, error = conf_matrix(test_data, pred)
-# print("Confusion matrix:", m)
-# print("Error rate:", error)
+#                                           Confussion matrix
+m, error = conf_matrix(test_data, pred)
+print("Confusion matrix:", m)
+print("Error rate:", error)
 
 
 def plot():
@@ -176,4 +176,4 @@ def histogram():
           ax.set_xlabel(f'{features[i]}')
      plt.show()
 
-histogram()
+#histogram()
