@@ -25,9 +25,9 @@ def read_file(txt_file):
   
     return np.array(iris_data), np.array(training_data), np.array(test_data)
 
-class_1, class_1_training, class_1_test = read_file('class_1')
-class_2, class_2_training, class_2_test = read_file('class_2')
-class_3, class_3_training, class_3_test = read_file('class_3')
+class_1, class_1_training, class_1_test = read_file('Iris_TTT4275/Iris_TTT4275/class_1')
+class_2, class_2_training, class_2_test = read_file('Iris_TTT4275/Iris_TTT4275/class_2')
+class_3, class_3_training, class_3_test = read_file('Iris_TTT4275/Iris_TTT4275/class_3')
 
 # Concatenate training and test datasets
 training_data = np.concatenate((class_1_training, class_2_training, class_3_training), axis=0)
