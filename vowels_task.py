@@ -155,14 +155,35 @@ def conf_matrix(pred):
 
      return cm, error
 
-###Testing###
-print(test(test_data)[0], '\n')
-print(test(test_data)[1], '\n')
-print(test(test_data)[2], '\n')
+def plot():
+        #Each class has three features, meaning a plot in 4D. This we can not visualize
+        #Plotting maybe focus on two features at a time?
+        plt.scatter(ae_training[:, 0], ae_training[:, 1], label='ae', s=10)
+        plt.scatter(ah_training[:, 0], ah_training[:, 1], label='ah', s=10)
+        plt.scatter(aw_training[:, 0], aw_training[:, 1], label='aw', s=10)
+        plt.scatter(eh_training[:, 0], eh_training[:, 1], label='eh', s=10)
+        plt.scatter(er_training[:, 0], er_training[:, 1], label='er', s=10)
+        plt.scatter(ei_training[:, 0], ei_training[:, 1], label='ei', s=10)
+        plt.scatter(ih_training[:, 0], ih_training[:, 1], label='ih', s=10)
+        plt.scatter(iy_training[:, 0], iy_training[:, 1], label='iy', s=10)
+        plt.scatter(oa_training[:, 0], oa_training[:, 1], label='oa', s=10)
+        plt.scatter(oo_training[:, 0], oo_training[:, 1], label='oo', s=10)
+        plt.scatter(uh_training[:, 0], uh_training[:, 1], label='uh', s=10)
+        plt.scatter(uw_training[:, 0], uw_training[:, 1], label='uw', s=10)
 
-predicted = test(test_data)[1]
-print("Confusion matrix: \n", conf_matrix(predicted)[0])
-print("Error rate: \n", conf_matrix(predicted)[1])
+        plt.legend()
+        plt.show()
+
+plot()
+
+###Testing###
+# print(test(test_data)[0], '\n')
+# print(test(test_data)[1], '\n')
+# print(test(test_data)[2], '\n')
+
+# predicted = test(test_data)[1]
+# print("Confusion matrix: \n", conf_matrix(predicted)[0])
+# print("Error rate: \n", conf_matrix(predicted)[1])
 
 
 #print("ae training set: ", ae_training)
