@@ -22,6 +22,9 @@ def read_file(txt_file):
         #Splitting into training and test data
         training_data = iris_data[:30]
         test_data = iris_data[30:]
+
+        ###Analyzing histograms shows Sepal Width has most overlap. Therefore remove column 2 (1 in python)
+        #iris_data, training_data, test_data = np.delete(iris_data, 1, axis=1), np.delete(training_data, 1, axis=1), np.delete(test_data, 1, axis=1)
   
     return np.array(iris_data), np.array(training_data), np.array(test_data)
 
@@ -33,14 +36,17 @@ class_3, class_3_training, class_3_test = read_file('Iris_TTT4275/Iris_TTT4275/c
 training_data = np.concatenate((class_1_training, class_2_training, class_3_training), axis=0)
 test_data = np.concatenate((class_1_test, class_2_test, class_3_test), axis=0)
 
+
 def sigmoid(z):
      return (np.exp(z))/(1+np.exp(z))
+
 
 def g_k(W, x_k):
      z = np.dot(W, x_k)
      return sigmoid(z)
 
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
+#5 columns with all features, 4 if one feature is removed (Task 2)
 W = np.random.rand(3, 5)*0.01
 
 #g_k er estimert verdi fra overnevnte funksjon
@@ -49,6 +55,7 @@ W = np.random.rand(3, 5)*0.01
 def grad_MSE(W, training_data):
      
      #Initial values for MSE and its gradient matrix
+     #5 columns with all features, 4 if one feature is removed (Task 2)
      grad_MSE_matrix = np.zeros((3, 5))
      MSE = 0
 
@@ -78,7 +85,9 @@ def training(W, training_data):
      #Initial values used in training
      alpha = 0.03
      MSE = grad_MSE(W, training_data)[1]
+
      iteration = 0
+     MSE_list, iter_list = [], []
 
      #Training until the MSE reaches disired threshold
      while MSE > 9:
@@ -90,11 +99,16 @@ def training(W, training_data):
           MSE = grad_MSE(W, training_data)[1]
 
           iteration += 1
+          MSE_list.append(MSE), iter_list.append(iteration)
+
+          #print("Iteration: ", iteration)
+          print("MSE: ", MSE)
 
      print("Number of iterations: ", iteration)
      print("Final MSE:", MSE)
 
-     return W
+     return W, MSE_list, iter_list
+
 
 def test(W, test_data):
      
@@ -128,7 +142,7 @@ def conf_matrix(test_data, pred):
 
 
 #                                              Training phase
-W_trained = training(W, training_data)
+W_trained, MSE_list, iter_list = training(W, training_data)
 print("Finally trained W matrix:", W_trained)
 
 #                       Test phase. Returns a 3x1-list with the number of classified samples for each class
@@ -139,6 +153,8 @@ m, error = conf_matrix(test_data, pred)
 print("Confusion matrix:", m)
 print("Error rate:", error)
 
+#plt.plot(iter_list, MSE_list)
+#plt.show()
 
 def plot():
      fig, axs = plt.subplots(4, 4)
