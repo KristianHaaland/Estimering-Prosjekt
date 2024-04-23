@@ -83,14 +83,14 @@ def grad_MSE(W, training_data):
 def training(W, training_data):
      
      #Initial values used in training
-     alpha = 0.03
+     alpha = 0.008
      MSE = grad_MSE(W, training_data)[1]
 
      iteration = 0
      MSE_list, iter_list = [], []
 
      #Training until the MSE reaches disired threshold
-     while MSE > 9:
+     while MSE > 8.5:
 
           #Updating the W matrix
           W -= alpha * grad_MSE(W, training_data)[0]
@@ -153,8 +153,8 @@ m, error = conf_matrix(test_data, pred)
 print("Confusion matrix:", m)
 print("Error rate:", error)
 
-#plt.plot(iter_list, MSE_list)
-#plt.show()
+plt.plot(iter_list, MSE_list)
+plt.show()
 
 def plot():
      fig, axs = plt.subplots(4, 4)

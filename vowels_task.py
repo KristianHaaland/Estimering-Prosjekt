@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn.mixture import GaussianMixture
+from mpl_toolkits.mplot3d import Axes3D
 
 #The vowels are fetched from vowdata_nohead.dat
 #We only need column 4, 5, and 6, which is frequency f1, f2 and f3. They are "steady state"
@@ -58,7 +59,7 @@ test_data = np.concatenate((ae_test, ah_test, aw_test, eh_test, er_test, ei_test
 """---------------------------------------------------------------"""
 
 """------------------------ CONSTANTS ----------------------------"""
-P_w = 69/(12*69) #A priori probabilities. We have the same amount of test samples (69) for each class
+P_w = 1/12 #A priori probabilities. We have the same amount of test samples (69) for each class (69/(12*69))
 num_gaussians = 3 #How many gaussians we should fit in the GMM
 cov_type = "diag" #Covariance matrix used in the GMM
 seed = 42 #The GaussianMixture is random each time. By setting a seed we ensure reproducability  
@@ -107,7 +108,7 @@ def print_weights():
                 print(f"Vowel: {vowel}")
                 for i in range(len(weights)):
                     print(f"Component {i+1}:  Weight: {weights[i]} Mean: {means[i]}")
-
+#print_weights()
 
 def test(test_data):
 
@@ -156,25 +157,31 @@ def conf_matrix(pred):
      return cm, error
 
 def plot():
-        #Each class has three features, meaning a plot in 4D. This we can not visualize
-        #Plotting maybe focus on two features at a time?
-        plt.scatter(ae_training[:, 1], ae_training[:, 2], label='ae', s=10)
-        plt.scatter(ah_training[:, 1], ah_training[:, 2], label='ah', s=10)
-        plt.scatter(aw_training[:, 1], aw_training[:, 2], label='aw', s=10)
-        plt.scatter(eh_training[:, 1], eh_training[:, 2], label='eh', s=10)
-        plt.scatter(er_training[:, 1], er_training[:, 2], label='er', s=10)
-        plt.scatter(ei_training[:, 1], ei_training[:, 2], label='ei', s=10)
-        plt.scatter(ih_training[:, 1], ih_training[:, 2], label='ih', s=10)
-        plt.scatter(iy_training[:, 1], iy_training[:, 2], label='iy', s=10)
-        plt.scatter(oa_training[:, 1], oa_training[:, 2], label='oa', s=10)
-        plt.scatter(oo_training[:, 1], oo_training[:, 2], label='oo', s=10)
-        plt.scatter(uh_training[:, 1], uh_training[:, 2], label='uh', s=10)
-        plt.scatter(uw_training[:, 1], uw_training[:, 2], label='uw', s=10)
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    
+    # Define a scale factor for the data
+    scale_factor = 0.1  # Adjust this value as needed
+    
+    # Scatter plot with scaled data
+    ax.scatter(ae_training[:, 0] * scale_factor, ae_training[:, 1] * scale_factor, ae_training[:, 2] * scale_factor, label='ae')
+    ax.scatter(ah_training[:, 0] * scale_factor, ah_training[:, 1] * scale_factor, ah_training[:, 2] * scale_factor, label='ah')
+    ax.scatter(aw_training[:, 0] * scale_factor, aw_training[:, 1] * scale_factor, aw_training[:, 2] * scale_factor, label='aw')
+    ax.scatter(eh_training[:, 0] * scale_factor, eh_training[:, 1] * scale_factor, eh_training[:, 2] * scale_factor, label='eh')
+    ax.scatter(er_training[:, 0] * scale_factor, er_training[:, 1] * scale_factor, er_training[:, 2] * scale_factor, label='er')
+    ax.scatter(ei_training[:, 0] * scale_factor, ei_training[:, 1] * scale_factor, ei_training[:, 2] * scale_factor, label='ei')
+    ax.scatter(ih_training[:, 0] * scale_factor, ih_training[:, 1] * scale_factor, ih_training[:, 2] * scale_factor, label='ih')
+    ax.scatter(iy_training[:, 0] * scale_factor, iy_training[:, 1] * scale_factor, iy_training[:, 2] * scale_factor, label='iy')
+    ax.scatter(oa_training[:, 0] * scale_factor, oa_training[:, 1] * scale_factor, oa_training[:, 2] * scale_factor, label='oa')
+    ax.scatter(oo_training[:, 0] * scale_factor, oo_training[:, 1] * scale_factor, oo_training[:, 2] * scale_factor, label='oo')
+    ax.scatter(uh_training[:, 0] * scale_factor, uh_training[:, 1] * scale_factor, uh_training[:, 2] * scale_factor, label='uh')
+    ax.scatter(uw_training[:, 0] * scale_factor, uw_training[:, 1] * scale_factor, uw_training[:, 2] * scale_factor, label='uw')
 
-        plt.legend()
-        plt.show()
+    plt.legend()
+    plt.show()
 
-plot()
+#plot()
+
 
 ###Testing###
 # print(test(test_data)[0], '\n')
