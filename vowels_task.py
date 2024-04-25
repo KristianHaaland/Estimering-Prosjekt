@@ -1,6 +1,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy.stats import multivariate_normal
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn.mixture import GaussianMixture
@@ -63,8 +64,10 @@ P_w = 1/12 #A priori probabilities. We have the same amount of test samples (69)
 num_gaussians = 3 #How many gaussians we should fit in the GMM
 cov_type = "diag" #Covariance matrix used in the GMM
 seed = 42 #The GaussianMixture is random each time. By setting a seed we ensure reproducability  
+"""---------------------------------------------------------------"""
 
 
+"""------------------- TRAINING FUNCTIONS ------------------------"""
 #Calculating the mean-vector for training_data. The components are the mean values of the formants
 #which describes the vowel
 def mean(training_data):
@@ -74,6 +77,7 @@ def mean(training_data):
     mu = [mu_1, mu_2, mu_3]
     return mu
 
+
 #Calculating the covariance matrix for training_data
 def cov_matrix(training_data):
      cov_matrix = np.cov(training_data, rowvar=False)/len(training_data[:, 0])
@@ -81,22 +85,27 @@ def cov_matrix(training_data):
      #Task 1c, only using the diagonal terms and removing the covariance terms
      diag_matrix = np.diag(np.diag(cov_matrix))
 
-     return cov_matrix
+     return diag_matrix
+
+def GMM(num_gaussians, cov_type, seed, data):
+     return GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(data)
+"""---------------------------------------------------------------"""
+
 
 #Dictionary which holds the estimated mean value and covariance matrix for each vowel
 trained_parameters = {
-    'ae': {'class': 1,  'mean': mean(ae_training), 'covariance': cov_matrix(ae_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(ae_training)},
-    'ah': {'class': 2,  'mean': mean(ah_training), 'covariance': cov_matrix(ah_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(ah_training)},
-    'aw': {'class': 3,  'mean': mean(aw_training), 'covariance': cov_matrix(aw_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(aw_training)},
-    'eh': {'class': 4,  'mean': mean(eh_training), 'covariance': cov_matrix(eh_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(eh_training)},
-    'er': {'class': 5,  'mean': mean(er_training), 'covariance': cov_matrix(er_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(er_training)},
-    'ei': {'class': 6,  'mean': mean(ei_training), 'covariance': cov_matrix(ei_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(ei_training)},
-    'ih': {'class': 7,  'mean': mean(ih_training), 'covariance': cov_matrix(ih_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(ih_training)},
-    'iy': {'class': 8,  'mean': mean(iy_training), 'covariance': cov_matrix(iy_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(iy_training)},
-    'oa': {'class': 9,  'mean': mean(oa_training), 'covariance': cov_matrix(oa_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(oa_training)},
-    'oo': {'class': 10, 'mean': mean(oo_training), 'covariance': cov_matrix(oo_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(oo_training)},
-    'uh': {'class': 11, 'mean': mean(uh_training), 'covariance': cov_matrix(uh_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(uh_training)},
-    'uw': {'class': 12, 'mean': mean(uw_training), 'covariance': cov_matrix(uw_training), 'GMM': GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(uw_training)},
+    'ae': {'class': 1,  'mean': mean(ae_training), 'covariance': cov_matrix(ae_training), 'GMM': GMM(num_gaussians, cov_type, seed, ae_training)},
+    'ah': {'class': 2,  'mean': mean(ah_training), 'covariance': cov_matrix(ah_training), 'GMM': GMM(num_gaussians, cov_type, seed, ah_training)},
+    'aw': {'class': 3,  'mean': mean(aw_training), 'covariance': cov_matrix(aw_training), 'GMM': GMM(num_gaussians, cov_type, seed, aw_training)},
+    'eh': {'class': 4,  'mean': mean(eh_training), 'covariance': cov_matrix(eh_training), 'GMM': GMM(num_gaussians, cov_type, seed, eh_training)},
+    'er': {'class': 5,  'mean': mean(er_training), 'covariance': cov_matrix(er_training), 'GMM': GMM(num_gaussians, cov_type, seed, er_training)},
+    'ei': {'class': 6,  'mean': mean(ei_training), 'covariance': cov_matrix(ei_training), 'GMM': GMM(num_gaussians, cov_type, seed, ei_training)},
+    'ih': {'class': 7,  'mean': mean(ih_training), 'covariance': cov_matrix(ih_training), 'GMM': GMM(num_gaussians, cov_type, seed, ih_training)},
+    'iy': {'class': 8,  'mean': mean(iy_training), 'covariance': cov_matrix(iy_training), 'GMM': GMM(num_gaussians, cov_type, seed, iy_training)},
+    'oa': {'class': 9,  'mean': mean(oa_training), 'covariance': cov_matrix(oa_training), 'GMM': GMM(num_gaussians, cov_type, seed, oa_training)},
+    'oo': {'class': 10, 'mean': mean(oo_training), 'covariance': cov_matrix(oo_training), 'GMM': GMM(num_gaussians, cov_type, seed, oo_training)},
+    'uh': {'class': 11, 'mean': mean(uh_training), 'covariance': cov_matrix(uh_training), 'GMM': GMM(num_gaussians, cov_type, seed, uh_training)},
+    'uw': {'class': 12, 'mean': mean(uw_training), 'covariance': cov_matrix(uw_training), 'GMM': GMM(num_gaussians, cov_type, seed, uw_training)}
 }
 
 def print_weights():
@@ -110,11 +119,13 @@ def print_weights():
                     print(f"Component {i+1}:  Weight: {weights[i]} Mean: {means[i]}")
 #print_weights()
 
+
+"""------------------------ TESTING ----------------------------"""
 def test(test_data):
 
     #Initializing lists and dictionary which stores the results of the test
     predicted_labels = []
-    predicted_class = []
+    predicted_classes = []
     classification_counts = {vowel: 0 for vowel in trained_parameters}
 
     #Looping through all the test data
@@ -143,10 +154,12 @@ def test(test_data):
 
         #Appending result to lists and dictionary
         predicted_labels.append(predicted_vowel)
-        predicted_class.append(class_num)
+        predicted_classes.append(class_num)
         classification_counts[predicted_vowel] += 1
 
-    return predicted_labels, predicted_class, classification_counts
+    return predicted_labels, predicted_classes, classification_counts
+"""---------------------------------------------------------------"""
+
 
 def conf_matrix(pred):
      true = [i for i in range(1, 13) for _ in range(69)]
@@ -155,6 +168,22 @@ def conf_matrix(pred):
      error = 1 - accuracy_score(true, pred)
 
      return cm, error
+
+def plot_conf_matrix(cm):
+     
+     ###Plotting the confusion matrix
+     total = np.sum(cm)
+     percent_occurrence = (cm / total) * 100
+     plt.figure(figsize=(10, 8))
+     sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", cbar=False, linewidths=0.5, linecolor='grey', vmax=69, annot_kws={"fontsize": 14})
+     phonetic_labels = ['ae', 'ah', 'aw', 'eh', 'er', 'ei', 'ih', 'iy', 'oa', 'oo', 'uh', 'uw']
+     plt.xticks(np.arange(12) + 0.5, phonetic_labels, fontsize=14)
+     plt.yticks(np.arange(12) + 0.5, phonetic_labels, fontsize=14)
+     plt.title("Confusion Matrix for a GMM with 3 Gaussians \n and diagonal covariance matrix", fontsize=20)
+     plt.xlabel("Predicted label", fontsize=16)
+     plt.ylabel("True label", fontsize=16)
+     plt.show()
+
 
 def plot():
     fig = plt.figure()
@@ -182,16 +211,71 @@ def plot():
 
 #plot()
 
+def histogram():
+    fig, axs = plt.subplots(3, 1)
+    features = ['f1', 'f2', 'f3']
+    # ae, ah, aw, eh, er, ei, ih, iy, oa, oo, uh, uw
+    bin_width = 40
+    for i in range(3):
+        ax = axs[i]
+        bins = np.arange(0, 3700 + bin_width, bin_width)
+        sns.histplot(ae_training[:, i], bins=bins, label=f'Formant nr.{i+1} er', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(ah_training[:, i], bins=bins, label=f'Formant nr.{i+1} ah', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(aw_training[:, i], bins=bins, label=f'Formant nr.{i+1} aw', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(eh_training[:, i], bins=bins, label=f'Formant nr.{i+1} eh', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(er_training[:, i], bins=bins, label=f'Formant nr.{i+1} er', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(ei_training[:, i], bins=bins, label=f'Formant nr.{i+1} ei', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(ih_training[:, i], bins=bins, label=f'Formant nr.{i+1} ih', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(iy_training[:, i], bins=bins, label=f'Formant nr.{i+1} iy', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(oa_training[:, i], bins=bins, label=f'Formant nr.{i+1} oa', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(oo_training[:, i], bins=bins, label=f'Formant nr.{i+1} oo', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(uh_training[:, i], bins=bins, label=f'Formant nr.{i+1} uh', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(uw_training[:, i], bins=bins, label=f'Formant nr.{i+1} uw', alpha=0.5, ax=ax, kde=True)
+
+        ax.set_xlabel(f'Frequency [Hz]', fontsize=16)
+        ax.set_ylabel(f'Count', fontsize=12)
+        #ax.legend(loc='upper right')
+    plt.show()
+
+histogram()
+
+def plot_gaussian():
+    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
+    features = ['f1', 'f2', 'f3']
+    bin_width = 60
+    for i in range(3):
+        ax = axs[i]
+        
+        # Plot Gaussian distributions
+        for phoneme in ['er', 'ih']:
+            params = trained_parameters[phoneme]
+            gmm = params['GMM']
+            mean = params['mean'][i]
+            covariance = params['covariance'][i, i]  # Assuming diagonal covariance matrix
+            gaussian = multivariate_normal(mean=mean, cov=covariance)
+            x = np.linspace(0, 4000, 1000)
+            y = gaussian.pdf(x)
+            ax.plot(x, y, label=f'{phoneme} Gaussian', linestyle='--')
+
+        ax.set_xlabel(f'Frequency [Hz]', fontsize=16)
+        ax.legend(loc='upper right')
+    plt.show()
+
+#plot_gaussian()
 
 ###Testing###
-# print(test(test_data)[0], '\n')
-# print(test(test_data)[1], '\n')
-# print(test(test_data)[2], '\n')
+print(test(test_data)[0], '\n')
+print(test(test_data)[1], '\n')
+print(test(test_data)[2], '\n')
 
-# predicted = test(test_data)[1]
-# print("Confusion matrix: \n", conf_matrix(predicted)[0])
-# print("Error rate: \n", conf_matrix(predicted)[1])
+predicted = test(test_data)[1]
+conf_mat = conf_matrix(predicted)[0]
+error = conf_matrix(predicted)[1]
 
+print("Confusion matrix: \n", conf_mat)
+print("Error rate: \n", error)
+
+plot_conf_matrix(conf_matrix(predicted)[0])
 
 #print("ae training set: ", ae_training)
 #print("Mean value vector: ", mean(ae_training))
