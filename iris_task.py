@@ -1,6 +1,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import confusion_matrix, accuracy_score
 
 # Sepal Length, Sepal Width, Petal Length, Petal Width
@@ -83,6 +84,7 @@ def grad_MSE(W, training_data):
 def training(W, training_data):
      
      #Initial values used in training
+     #alpha = [0.1, 0.001, 0.0001, 0.00001, 0.000001]
      alpha = 0.008
      MSE = grad_MSE(W, training_data)[1]
 
@@ -90,6 +92,13 @@ def training(W, training_data):
      MSE_list, iter_list = [], []
 
      #Training until the MSE reaches disired threshold
+     #for i in range(5):
+          #curr_alpha = alpha[i]
+          #curr_W = np.random.rand(3, 5)*0.01
+          #alpha_MSE_list = []
+
+          #for j in range(4000):
+
      while MSE > 8.5:
 
           #Updating the W matrix
@@ -100,8 +109,16 @@ def training(W, training_data):
 
           iteration += 1
           MSE_list.append(MSE), iter_list.append(iteration)
+          #alpha_MSE_list.append(MSE)
 
-          #print("Iteration: ", iteration)
+          #if i == 0:
+          #     iter_list.append(iteration)
+
+               #print("Iteration: ", iteration)
+               #print(f"MSE using alpha = {curr_alpha}: ", MSE)
+
+          #MSE_list.append(alpha_MSE_list)
+
           print("MSE: ", MSE)
 
      print("Number of iterations: ", iteration)
@@ -142,19 +159,17 @@ def conf_matrix(test_data, pred):
 
 
 #                                              Training phase
-W_trained, MSE_list, iter_list = training(W, training_data)
-print("Finally trained W matrix:", W_trained)
+# W_trained, MSE_list, iter_list = training(W, training_data)
+# print("Finally trained W matrix:", W_trained)
 
-#                       Test phase. Returns a 3x1-list with the number of classified samples for each class
-pred = test(W_trained, test_data)
+# #                       Test phase. Returns a 3x1-list with the number of classified samples for each class
+# pred = test(W_trained, test_data)
 
-#                                           Confussion matrix
-m, error = conf_matrix(test_data, pred)
-print("Confusion matrix:", m)
-print("Error rate:", error)
+# #                                           Confussion matrix
+# m, error = conf_matrix(test_data, pred)
+# print("Confusion matrix:", m)
+# print("Error rate:", error)
 
-plt.plot(iter_list, MSE_list)
-plt.show()
 
 def plot():
      fig, axs = plt.subplots(4, 4)
@@ -179,17 +194,37 @@ def plot():
 #plot()
 
 def histogram():
-     fig, axs = plt.subplots(4, 1)
-     features = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
-     bin_width = 0.2
-     for i in range(4):
-          ax = axs[i]
-          bins = np.arange(0, 8 + bin_width, bin_width)
-          ax.hist(class_1[:, i], bins=bins, color='red', label='Iris-setosa', alpha=0.5)#, range=(0, 8))
-          ax.hist(class_2[:, i], bins=bins, color='green', label='Iris-versicolor', alpha=0.5)#, range=(0, 8))
-          ax.hist(class_3[:, i], bins=bins, color='blue', label='Iris-virginica', alpha=0.5)#, range=(0, 8))
+    bin_width=0.2
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))  # Set the size of the subplot
+    features = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
+    for i, ax in enumerate(axs.flat):  # Enumerate to loop over both rows and columns
+        bins = np.arange(min(min(class_1[:, i]), min(class_2[:, i]), min(class_3[:, i])),
+                         max(max(class_1[:, i]), max(class_2[:, i]), max(class_3[:, i])) + bin_width,
+                         bin_width)
+        sns.histplot(class_1[:, i], bins=bins, color='red', label='Iris-setosa', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(class_2[:, i], bins=bins, color='green', label='Iris-versicolor', alpha=0.5, ax=ax, kde=True)
+        sns.histplot(class_3[:, i], bins=bins, color='blue', label='Iris-virginica', alpha=0.5, ax=ax, kde=True)
 
-          ax.set_xlabel(f'{features[i]}')
+        ax.set_xlabel(features[i], fontsize=16)
+        ax.set_ylabel('Count', fontsize=16)
+        ax.legend()  # Add legend for each subplot
+
+    plt.tight_layout()  # Adjust subplot layout to avoid overlapping
+    plt.show()
+
+histogram()
+
+def plot_MSE_alpha():
+     for i in range(5):
+          alpha = [0.1, 0.001, 0.0001, 0.00001, 0.000001]
+          plt.plot(iter_list, MSE_list[i], label = f'$\u03B1$={alpha[i]}')
+          plt.xlabel("Iteration", fontsize=18)
+          plt.ylabel("Minimum Square Error (MSE)", fontsize=18)
+          plt.title(r'MSE for different values of $\alpha$', fontsize=22)
+          plt.grid(True)
+          plt.xticks(fontsize=14)
+          plt.yticks(fontsize=14)
+          plt.legend(loc = 'upper right', fontsize=14)
      plt.show()
 
-#histogram()
+#plot_MSE_alpha()

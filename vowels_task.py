@@ -66,6 +66,23 @@ cov_type = "diag" #Covariance matrix used in the GMM
 seed = 42 #The GaussianMixture is random each time. By setting a seed we ensure reproducability  
 """---------------------------------------------------------------"""
 
+def plot_fig():
+    true_classes = np.array([1]*50 + [2]*50 + [3]*50 + [4]*50)
+
+# Predicted classes
+    predicted_classes = np.array([1]*49 + [3] + [2]*48 + [4]*2 + [1]*1 + [2]*4 + [3]*44 + [4]*1 + [1]*2 + [2]*2 + [4]*46)
+    cm = confusion_matrix(true_classes, predicted_classes)
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", cbar=False, linewidths=0.5, linecolor='grey', vmax=50, annot_kws={"fontsize": 24})
+    phonetic_labels = ['Class 1', 'Class 2', 'Class 3', 'Class 4']
+    plt.xticks(np.arange(4) + 0.5, phonetic_labels, fontsize=18)
+    plt.yticks(np.arange(4) + 0.5, phonetic_labels, fontsize=18)
+    plt.title("Confusion Matrix", fontsize=20)
+    plt.xlabel("Predicted class", fontsize=18)
+    plt.ylabel("True class", fontsize=18)
+    plt.show()
+plot_fig()
 
 """------------------- TRAINING FUNCTIONS ------------------------"""
 #Calculating the mean-vector for training_data. The components are the mean values of the formants
@@ -237,7 +254,7 @@ def histogram():
         #ax.legend(loc='upper right')
     plt.show()
 
-histogram()
+#histogram()
 
 def plot_gaussian():
     fig, axs = plt.subplots(3, 1, figsize=(10, 15))
@@ -264,18 +281,18 @@ def plot_gaussian():
 #plot_gaussian()
 
 ###Testing###
-print(test(test_data)[0], '\n')
-print(test(test_data)[1], '\n')
-print(test(test_data)[2], '\n')
+# print(test(test_data)[0], '\n')
+# print(test(test_data)[1], '\n')
+# print(test(test_data)[2], '\n')
 
-predicted = test(test_data)[1]
-conf_mat = conf_matrix(predicted)[0]
-error = conf_matrix(predicted)[1]
+# predicted = test(test_data)[1]
+# conf_mat = conf_matrix(predicted)[0]
+# error = conf_matrix(predicted)[1]
 
-print("Confusion matrix: \n", conf_mat)
-print("Error rate: \n", error)
+# print("Confusion matrix: \n", conf_mat)
+# print("Error rate: \n", error)
 
-plot_conf_matrix(conf_matrix(predicted)[0])
+# plot_conf_matrix(conf_matrix(predicted)[0])
 
 #print("ae training set: ", ae_training)
 #print("Mean value vector: ", mean(ae_training))
