@@ -25,7 +25,7 @@ def read_file(txt_file):
         test_data = iris_data[30:]
 
         ###Analyzing histograms shows Sepal Width has most overlap. Therefore remove column 2 (1 in python)
-        #iris_data, training_data, test_data = np.delete(iris_data, 1, axis=1), np.delete(training_data, 1, axis=1), np.delete(test_data, 1, axis=1)
+        iris_data, training_data, test_data = np.delete(iris_data, [0,1,3], axis=1), np.delete(training_data, [0,1,3], axis=1), np.delete(test_data, [0,1,3], axis=1)
   
     return np.array(iris_data), np.array(training_data), np.array(test_data)
 
@@ -48,7 +48,7 @@ def g_k(W, x_k):
 
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
 #5 columns with all features, 4 if one feature is removed (Task 2)
-W = np.random.rand(3, 5)*0.01
+W = np.random.rand(3, 2)*0.01
 
 #g_k er estimert verdi fra overnevnte funksjon
 #t_k er target vector. Så om input x_k er av class 1, vil t_k=[1, 0, 0]
@@ -57,7 +57,7 @@ def grad_MSE(W, training_data):
      
      #Initial values for MSE and its gradient matrix
      #5 columns with all features, 4 if one feature is removed (Task 2)
-     grad_MSE_matrix = np.zeros((3, 5))
+     grad_MSE_matrix = np.zeros((3, 2))
      MSE = 0
 
      #Checks which class the target output is
@@ -99,7 +99,7 @@ def training(W, training_data):
 
           #for j in range(4000):
 
-     while MSE > 8.5:
+     while MSE > 12.5:
 
           #Updating the W matrix
           W -= alpha * grad_MSE(W, training_data)[0]
@@ -139,7 +139,7 @@ def test(W, test_data):
 
      return pred
 
-
+#Change from 20 to 30 and 40 to 60 when using either test or training data. 
 def conf_matrix(test_data, pred):
 
      true = []
@@ -163,9 +163,11 @@ W_trained, MSE_list, iter_list = training(W, training_data)
 print("Finally trained W matrix:", W_trained)
 
 # #                       Test phase. Returns a 3x1-list with the number of classified samples for each class
+# Choose test_data or training data depending on which you want a confusion matrix
 pred = test(W_trained, test_data)
 
-# #                                           Confussion matrix
+# #                                           Confusion matrix
+# Choose test_data or training data depending on which you want a confusion matrix
 m, error = conf_matrix(test_data, pred)
 print("Confusion matrix:", m)
 print("Error rate:", error)
@@ -234,9 +236,9 @@ def plot_conf_matrix(cm):
      sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", cbar=False, linewidths=0.5, linecolor='grey',  vmax=20 ,annot_kws={"fontsize": 14})
      plt.xticks(np.arange(3) + 0.5, ["Iris Setosa","Iris Versicolor","Iris Virginica"], fontsize=14)
      plt.yticks(np.arange(3) + 0.5, ["Iris Setosa","Iris Versicolor","Iris Virginica"], fontsize=14)
-     plt.xlabel("Predicted Class", fontsize=12)
-     plt.ylabel("True Class", fontsize=12)
-     plt.title("Confusion Matrix\n Trainig set (last 20 samples)", fontsize=16)
+     plt.xlabel("Predicted Class", fontsize=15)
+     plt.ylabel("True Class", fontsize=15)
+     plt.title("Confusion Matrix\n Testing set (last 20 samples)\n Excluding Sepal Width, Sepal length and Petal Width", fontsize=16)
      plt.show() 
 
 plot_conf_matrix(m) 
