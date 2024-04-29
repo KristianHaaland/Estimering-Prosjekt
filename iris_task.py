@@ -159,16 +159,16 @@ def conf_matrix(test_data, pred):
 
 
 #                                              Training phase
-# W_trained, MSE_list, iter_list = training(W, training_data)
-# print("Finally trained W matrix:", W_trained)
+W_trained, MSE_list, iter_list = training(W, training_data)
+print("Finally trained W matrix:", W_trained)
 
 # #                       Test phase. Returns a 3x1-list with the number of classified samples for each class
-# pred = test(W_trained, test_data)
+pred = test(W_trained, test_data)
 
 # #                                           Confussion matrix
-# m, error = conf_matrix(test_data, pred)
-# print("Confusion matrix:", m)
-# print("Error rate:", error)
+m, error = conf_matrix(test_data, pred)
+print("Confusion matrix:", m)
+print("Error rate:", error)
 
 
 def plot():
@@ -212,7 +212,7 @@ def histogram():
     plt.tight_layout()  # Adjust subplot layout to avoid overlapping
     plt.show()
 
-histogram()
+#histogram()
 
 def plot_MSE_alpha():
      for i in range(5):
@@ -228,3 +228,15 @@ def plot_MSE_alpha():
      plt.show()
 
 #plot_MSE_alpha()
+
+def plot_conf_matrix(cm):
+     plt.figure(figsize=(8, 6))
+     sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", cbar=False, linewidths=0.5, linecolor='grey',  vmax=20 ,annot_kws={"fontsize": 14})
+     plt.xticks(np.arange(3) + 0.5, ["Iris Setosa","Iris Versicolor","Iris Virginica"], fontsize=14)
+     plt.yticks(np.arange(3) + 0.5, ["Iris Setosa","Iris Versicolor","Iris Virginica"], fontsize=14)
+     plt.xlabel("Predicted Class", fontsize=12)
+     plt.ylabel("True Class", fontsize=12)
+     plt.title("Confusion Matrix\n Trainig set (last 20 samples)", fontsize=16)
+     plt.show() 
+
+plot_conf_matrix(m) 
