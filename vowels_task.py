@@ -56,7 +56,9 @@ oo_training, oo_test = oo_data[:70], oo_data[70:]
 uh_training, uh_test = uh_data[:70], uh_data[70:]
 uw_training, uw_test = uw_data[:70], uw_data[70:]
 
+
 test_data = np.concatenate((ae_test, ah_test, aw_test, eh_test, er_test, ei_test, ih_test, iy_test, oa_test, oo_test, uh_test, uw_test), axis=0)
+training_data = np.concatenate((ae_training, ah_training, aw_training, eh_training, er_training, ei_training, ih_training, iy_training, oa_training, oo_training, uh_training, uw_training), axis=0)
 """---------------------------------------------------------------"""
 
 """------------------------ CONSTANTS ----------------------------"""
@@ -65,24 +67,6 @@ num_gaussians = 3 #How many gaussians we should fit in the GMM
 cov_type = "diag" #Covariance matrix used in the GMM
 seed = 42 #The GaussianMixture is random each time. By setting a seed we ensure reproducability  
 """---------------------------------------------------------------"""
-
-def plot_fig():
-    true_classes = np.array([1]*50 + [2]*50 + [3]*50 + [4]*50)
-
-# Predicted classes
-    predicted_classes = np.array([1]*49 + [3] + [2]*48 + [4]*2 + [1]*1 + [2]*4 + [3]*44 + [4]*1 + [1]*2 + [2]*2 + [4]*46)
-    cm = confusion_matrix(true_classes, predicted_classes)
-
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", cbar=False, linewidths=0.5, linecolor='grey', vmax=50, annot_kws={"fontsize": 24})
-    phonetic_labels = ['Class 1', 'Class 2', 'Class 3', 'Class 4']
-    plt.xticks(np.arange(4) + 0.5, phonetic_labels, fontsize=18)
-    plt.yticks(np.arange(4) + 0.5, phonetic_labels, fontsize=18)
-    plt.title("Confusion Matrix", fontsize=20)
-    plt.xlabel("Predicted class", fontsize=18)
-    plt.ylabel("True class", fontsize=18)
-    plt.show()
-plot_fig()
 
 """------------------- TRAINING FUNCTIONS ------------------------"""
 #Calculating the mean-vector for training_data. The components are the mean values of the formants
@@ -102,14 +86,14 @@ def cov_matrix(training_data):
      #Task 1c, only using the diagonal terms and removing the covariance terms
      diag_matrix = np.diag(np.diag(cov_matrix))
 
-     return diag_matrix
+     return cov_matrix
 
 def GMM(num_gaussians, cov_type, seed, data):
      return GaussianMixture(n_components=num_gaussians, covariance_type = cov_type, random_state=seed).fit(data)
 """---------------------------------------------------------------"""
 
 
-#Dictionary which holds the estimated mean value and covariance matrix for each vowel
+#Dictionary which holds the estimated mean value,covariance matrix and GMM for each vowel
 trained_parameters = {
     'ae': {'class': 1,  'mean': mean(ae_training), 'covariance': cov_matrix(ae_training), 'GMM': GMM(num_gaussians, cov_type, seed, ae_training)},
     'ah': {'class': 2,  'mean': mean(ah_training), 'covariance': cov_matrix(ah_training), 'GMM': GMM(num_gaussians, cov_type, seed, ah_training)},
@@ -136,6 +120,15 @@ def print_weights():
                     print(f"Component {i+1}:  Weight: {weights[i]} Mean: {means[i]}")
 #print_weights()
 
+def print_parameters():
+     for vowel, parameters in trained_parameters.items():
+          mean = parameters['mean']
+          cov = parameters['covariance']
+
+          print(f"Vowel: {vowel}")
+          print(f'mean vector: {mean}')
+          print(f'Covariance matrix: \n {cov}')
+#print_parameters()
 
 """------------------------ TESTING ----------------------------"""
 def test(test_data):
@@ -157,11 +150,11 @@ def test(test_data):
             ###      Single Gaussian model    ###
             mean = parameters['mean']
             cov = parameters['covariance']
-            #prob = multivariate_normal(mean=mean, cov=cov).pdf(test_data[i])
+            prob = multivariate_normal(mean=mean, cov=cov).pdf(test_data[i])
 
             ###          GMM        ###
-            gmm = parameters['GMM']
-            prob = np.exp(gmm.score_samples([test_data[i]])[0])
+            #gmm = parameters['GMM']
+            #prob = np.exp(gmm.score_samples([test_data[i]])[0])
 
             #Descision rule. The gauss which gives the largest probability is the class which is chosen
             if prob*P_w > max_prob:
@@ -179,13 +172,15 @@ def test(test_data):
 
 
 def conf_matrix(pred):
-     true = [i for i in range(1, 13) for _ in range(69)]
+     true = [i for i in range(1, 13) for _ in range(70)]
 
      cm = confusion_matrix(true, pred)
      error = 1 - accuracy_score(true, pred)
 
      return cm, error
 
+
+#Plotting confusion matrix
 def plot_conf_matrix(cm):
      
      ###Plotting the confusion matrix
@@ -196,12 +191,13 @@ def plot_conf_matrix(cm):
      phonetic_labels = ['ae', 'ah', 'aw', 'eh', 'er', 'ei', 'ih', 'iy', 'oa', 'oo', 'uh', 'uw']
      plt.xticks(np.arange(12) + 0.5, phonetic_labels, fontsize=14)
      plt.yticks(np.arange(12) + 0.5, phonetic_labels, fontsize=14)
-     plt.title("Confusion Matrix for a GMM with 3 Gaussians \n and diagonal covariance matrix", fontsize=20)
+     plt.title("Confusion Matrix using the training data", fontsize=20)
      plt.xlabel("Predicted label", fontsize=16)
      plt.ylabel("True label", fontsize=16)
      plt.show()
 
 
+#3D plot of all training samples
 def plot():
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
@@ -225,9 +221,10 @@ def plot():
 
     plt.legend()
     plt.show()
-
 #plot()
 
+
+#Plotting histogram
 def histogram():
     fig, axs = plt.subplots(3, 1)
     features = ['f1', 'f2', 'f3']
@@ -253,32 +250,8 @@ def histogram():
         ax.set_ylabel(f'Count', fontsize=12)
         #ax.legend(loc='upper right')
     plt.show()
-
 #histogram()
 
-def plot_gaussian():
-    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
-    features = ['f1', 'f2', 'f3']
-    bin_width = 60
-    for i in range(3):
-        ax = axs[i]
-        
-        # Plot Gaussian distributions
-        for phoneme in ['er', 'ih']:
-            params = trained_parameters[phoneme]
-            gmm = params['GMM']
-            mean = params['mean'][i]
-            covariance = params['covariance'][i, i]  # Assuming diagonal covariance matrix
-            gaussian = multivariate_normal(mean=mean, cov=covariance)
-            x = np.linspace(0, 4000, 1000)
-            y = gaussian.pdf(x)
-            ax.plot(x, y, label=f'{phoneme} Gaussian', linestyle='--')
-
-        ax.set_xlabel(f'Frequency [Hz]', fontsize=16)
-        ax.legend(loc='upper right')
-    plt.show()
-
-#plot_gaussian()
 
 ###Testing###
 # print(test(test_data)[0], '\n')
@@ -298,3 +271,59 @@ def plot_gaussian():
 #print("Mean value vector: ", mean(ae_training))
 #print("Covariance matrix: ", cov_matrix(ae_training))
 #print(multivariate_gaussian(mean(ae_training), cov_matrix(ae_training)))
+
+
+def plot_gaussian_mixture(gmms, datas, labels):
+    num_features = datas[0].shape[1]
+    x = np.linspace(np.min([data.min() for data in datas]), np.max([data.max() for data in datas]), 1000)
+    colors = ['r', 'g', 'b']  # Colors for each component
+
+    plt.figure(figsize=(12, 4*num_features))
+
+    bin_width = 40
+    
+    for i in range(num_features):
+        plt.subplot(num_features, 1, i+1)
+        for idx, (gmm, data, label) in enumerate(zip(gmms, datas, labels)):
+            bins = np.arange(0, 3700 + bin_width, bin_width)
+            plt.hist(data[:, i], bins=bins, density=True, alpha=0.5, color=colors[idx], label=label)  # Plot the histogram of the feature
+            
+            total_gauss = np.zeros_like(x)
+            for j in range(gmm.n_components):
+                mean = gmm.means_[j, i]
+                std_dev = np.sqrt(gmm.covariances_[j, i])
+
+                y = (1 / (np.sqrt(2 * np.pi) * std_dev)) * np.exp(-0.5 * ((x - mean) / std_dev) ** 2)
+                total_gauss += y
+            plt.plot(x, total_gauss, color=colors[idx], label=f'Formant {i+1} - {label}')
+        
+        plt.xlabel(f'Feature {i+1} Value')
+        plt.ylabel('Density')
+        plt.legend(loc='upper right')
+
+    plt.tight_layout()
+    plt.show()
+
+#gmms = [trained_parameters['ae']['GMM'], trained_parameters['ih']['GMM']]
+#datas = [ae_training, ih_training]
+#labels = ['ae', 'ih']
+#plot_gaussian_mixture(gmms, datas, labels)
+
+
+def plot_fig():
+    true_classes = np.array([1]*50 + [2]*50 + [3]*50 + [4]*50)
+
+# Predicted classes
+    predicted_classes = np.array([1]*49 + [3] + [2]*48 + [4]*2 + [1]*1 + [2]*4 + [3]*44 + [4]*1 + [1]*2 + [2]*2 + [4]*46)
+    cm = confusion_matrix(true_classes, predicted_classes)
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", cbar=False, linewidths=0.5, linecolor='grey', vmax=50, annot_kws={"fontsize": 24})
+    phonetic_labels = ['Class 1', 'Class 2', 'Class 3', 'Class 4']
+    plt.xticks(np.arange(4) + 0.5, phonetic_labels, fontsize=18)
+    plt.yticks(np.arange(4) + 0.5, phonetic_labels, fontsize=18)
+    plt.title("Confusion Matrix", fontsize=20)
+    plt.xlabel("Predicted class", fontsize=18)
+    plt.ylabel("True class", fontsize=18)
+    plt.show()
+#plot_fig()
