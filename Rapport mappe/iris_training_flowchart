@@ -1,0 +1,121 @@
+<mxfile host="app.diagrams.net" modified="2024-04-30T09:54:11.823Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="P3o4BB_kyrxTntRNguRt" version="24.2.7" type="onedrive">
+  <diagram name="Page-1" id="K38NhssyhxAKkhLmVmCy">
+    <mxGraphModel grid="1" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="4681" pageHeight="3300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_bgDJkCPs19vm15WTJFD-1" value="&lt;font style=&quot;font-size: 37px;&quot;&gt;Start&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=4;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="738" y="-305" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-2" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontStyle=1" edge="1" parent="1" source="_bgDJkCPs19vm15WTJFD-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="828" y="-191" as="sourcePoint" />
+            <mxPoint x="838" y="-166" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-3" value="&lt;font style=&quot;font-size: 29px;&quot;&gt;Input&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;strokeWidth=4;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="704" y="16" width="270" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-4" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="840" y="75" as="sourcePoint" />
+            <mxPoint x="840" y="118" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-5" value="&lt;b style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 27px;&quot;&gt;irisdata database&lt;/font&gt;&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;strokeWidth=4;fillColor=#f8cecc;strokeColor=#b85450;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="767" y="-164" width="142" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-6" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="840" y="-24" as="sourcePoint" />
+            <mxPoint x="840" y="14" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-7" value="&lt;font style=&quot;font-size: 21px;&quot;&gt;Has the MSE reached desired threshold?&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=4;fontStyle=1;fontSize=21;" vertex="1" parent="1">
+          <mxGeometry x="750" y="255" width="175" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-10" value="&lt;font style=&quot;font-size: 26px;&quot;&gt;No&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;strokeWidth=4;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="778" y="433" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="838" y="437" as="sourcePoint" />
+            <mxPoint x="838" y="477" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-12" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Compute the gradient and update W&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=25;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="713" y="479" width="250" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="837" y="563" as="sourcePoint" />
+            <mxPoint x="837" y="613" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-14" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Update the MSE&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=25;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="712" y="615" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-15" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Initialize MSE with the starting W-matrix&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=4;fontSize=25;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="715" y="120" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-16" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="837.86" y="210" as="sourcePoint" />
+            <mxPoint x="837.86" y="253" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-17" value="&lt;font style=&quot;font-size: 26px;&quot;&gt;Yes&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;strokeWidth=4;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="917" y="308" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-18" value="&lt;span style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 29px;&quot;&gt;Output&lt;/font&gt;&lt;/span&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;strokeWidth=4;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1022" y="312.5" width="263" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-19" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1276" y="346" as="sourcePoint" />
+            <mxPoint x="1370" y="346" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-20" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="925" y="342.57" as="sourcePoint" />
+            <mxPoint x="1030" y="343" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-21" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=4;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1370" y="344" as="sourcePoint" />
+            <mxPoint x="1370" y="518" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-22" value="&lt;font style=&quot;font-size: 37px;&quot;&gt;End&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=4;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1270" y="519" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-26" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="657" y="345" as="sourcePoint" />
+            <mxPoint x="748" y="345" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-27" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="657" y="737" as="sourcePoint" />
+            <mxPoint x="837" y="737" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-28" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=4;fontStyle=1" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="659" y="737" as="sourcePoint" />
+            <mxPoint x="659" y="344" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_bgDJkCPs19vm15WTJFD-29" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=4;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="835.6800000000001" y="737" as="sourcePoint" />
+            <mxPoint x="835.6800000000001" y="677" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

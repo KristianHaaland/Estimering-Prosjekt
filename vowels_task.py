@@ -65,7 +65,7 @@ training_data = np.concatenate((ae_training, ah_training, aw_training, eh_traini
 P_w = 1/12 #A priori probabilities. We have the same amount of test samples (69) for each class (69/(12*69))
 num_gaussians = 3 #How many gaussians we should fit in the GMM
 cov_type = "diag" #Covariance matrix used in the GMM
-seed = 42 #The GaussianMixture is random each time. By setting a seed we ensure reproducability  
+seed = 42 #The GaussianMixture is random at the start each time. By setting a seed we ensure reproducability  
 """---------------------------------------------------------------"""
 
 """------------------- TRAINING FUNCTIONS ------------------------"""
@@ -252,27 +252,6 @@ def histogram():
     plt.show()
 #histogram()
 
-
-###Testing###
-# print(test(test_data)[0], '\n')
-# print(test(test_data)[1], '\n')
-# print(test(test_data)[2], '\n')
-
-# predicted = test(test_data)[1]
-# conf_mat = conf_matrix(predicted)[0]
-# error = conf_matrix(predicted)[1]
-
-# print("Confusion matrix: \n", conf_mat)
-# print("Error rate: \n", error)
-
-# plot_conf_matrix(conf_matrix(predicted)[0])
-
-#print("ae training set: ", ae_training)
-#print("Mean value vector: ", mean(ae_training))
-#print("Covariance matrix: ", cov_matrix(ae_training))
-#print(multivariate_gaussian(mean(ae_training), cov_matrix(ae_training)))
-
-
 def plot_gaussian_mixture(gmms, datas, labels):
     num_features = datas[0].shape[1]
     x = np.linspace(np.min([data.min() for data in datas]), np.max([data.max() for data in datas]), 1000)
@@ -327,3 +306,25 @@ def plot_fig():
     plt.ylabel("True class", fontsize=18)
     plt.show()
 #plot_fig()
+
+
+
+
+###Testing###
+print(test(test_data)[0], '\n')
+print(test(test_data)[1], '\n')
+print(test(test_data)[2], '\n')
+
+predicted = test(test_data)[1]
+conf_mat = conf_matrix(predicted)[0]
+error = conf_matrix(predicted)[1]
+
+print("Confusion matrix: \n", conf_mat)
+print("Error rate: \n", error)
+
+plot_conf_matrix(conf_matrix(predicted)[0])
+
+# print("ae training set: ", ae_training)
+# print("Mean value vector: ", mean(ae_training))
+# print("Covariance matrix: ", cov_matrix(ae_training))
+# print(multivariate_gaussian(mean(ae_training), cov_matrix(ae_training)))

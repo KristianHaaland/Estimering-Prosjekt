@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, accuracy_score
 
-# Sepal Length, Sepal Width, Petal Length, Petal Width
+#Features: Sepal Length, Sepal Width, Petal Length, Petal Width
 
 def read_file(txt_file):
     with open(txt_file, 'r') as file:
@@ -17,6 +17,7 @@ def read_file(txt_file):
         for line in data:
                 iris_data.append([float(num) for num in line.split(',')])
 
+        #Add 1 to each data sample to include the bias term in the matrix-vector product
         for row in iris_data:
              row.append(1)
 
@@ -38,21 +39,25 @@ training_data = np.concatenate((class_1_training, class_2_training, class_3_trai
 test_data = np.concatenate((class_1_test, class_2_test, class_3_test), axis=0)
 
 
+#Sigmoid function
 def sigmoid(z):
      return (np.exp(z))/(1+np.exp(z))
 
 
+#z=Wx
 def g_k(W, x_k):
      z = np.dot(W, x_k)
      return sigmoid(z)
+
 
 #Initializing the weigth matrix. Each element is initially random between 0 and 0.01
 #5 columns with all features, 4 if one feature is removed (Task 2)
 W = np.random.rand(3, 2)*0.01
 
-#g_k er estimert verdi fra overnevnte funksjon
-#t_k er target vector. Så om input x_k er av class 1, vil t_k=[1, 0, 0]
-#x_k er input vektoren
+
+#g_k is the estimated vector
+#t_k is the target vector. If input x_k is class 1 --> t_k=[1,0,0]
+#x_k is the input vector
 def grad_MSE(W, training_data):
      
      #Initial values for MSE and its gradient matrix
@@ -99,6 +104,7 @@ def training(W, training_data):
 
           #for j in range(4000):
 
+     #Change threshold for different datasets. Avoids unnescessary runtimes
      while MSE > 12.5:
 
           #Updating the W matrix
@@ -172,7 +178,7 @@ m, error = conf_matrix(test_data, pred)
 print("Confusion matrix:", m)
 print("Error rate:", error)
 
-
+# Scatter plot of all features
 def plot():
      fig, axs = plt.subplots(4, 4)
      features = ['Sepal Length', 'Sepal Width', 'Petal Length', 'Petal Width']
